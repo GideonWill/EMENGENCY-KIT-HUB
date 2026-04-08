@@ -36,14 +36,13 @@ export function CartProvider({ children }) {
 
   const addItem = useCallback(
     (item, quantity = 1) => {
-      const qty = Math.max(1, Math.min(99, Number(quantity) || 1))
+      const qty = Math.max(1, Number(quantity) || 1)
       setLines((prev) => {
         const i = prev.findIndex((l) => l.id === item.id)
         let next
         if (i >= 0) {
           next = [...prev]
-          const merged = Math.min(99, next[i].quantity + qty)
-          next[i] = { ...next[i], quantity: merged }
+          next[i] = { ...next[i], quantity: next[i].quantity + qty }
         } else {
           next = [...prev, { ...item, quantity: qty }]
         }
@@ -55,7 +54,7 @@ export function CartProvider({ children }) {
   )
 
   const setQuantity = useCallback((id, quantity) => {
-    const qty = Math.max(1, Math.min(99, Number(quantity) || 1))
+    const qty = Math.max(1, Number(quantity) || 1)
     setLines((prev) => {
       const next = prev.map((l) => (l.id === id ? { ...l, quantity: qty } : l))
       saveCart(next)
@@ -80,7 +79,7 @@ export function CartProvider({ children }) {
     [lines]
   )
 
-  const count = useMemo(() => lines.reduce((sum, l) => sum + l.quantity, 0), [lines])
+  const count = lines.length
 
   const value = useMemo(
     () => ({

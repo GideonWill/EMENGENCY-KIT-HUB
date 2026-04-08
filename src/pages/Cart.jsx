@@ -129,37 +129,41 @@ export default function Cart() {
 
       <ul className="mt-8 divide-y divide-slate-200 border border-slate-200">
         {lines.map((line) => (
-          <li key={line.id} className="flex flex-wrap items-center gap-4 p-4 sm:flex-nowrap">
-            {line.image && (
-              <img src={line.image} alt="" className="h-20 w-20 border border-slate-200 object-cover" />
-            )}
-            <div className="min-w-0 flex-1">
-              <p className="font-semibold text-slate-900">{line.name}</p>
-              <p className="text-sm text-slate-600">GH₵{line.price.toFixed(2)} each</p>
+          <li key={line.id} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 p-4">
+            <div className="flex w-full sm:w-auto items-center gap-4 sm:flex-1">
+              {line.image && (
+                <img src={line.image} alt="" className="h-20 w-20 shrink-0 border border-slate-200 object-cover" />
+              )}
+              <div className="min-w-0 flex-1">
+                <p className="font-semibold text-slate-900 line-clamp-2">{line.name}</p>
+                <p className="mt-1 text-sm text-slate-600">GH₵{line.price.toFixed(2)} each</p>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <label htmlFor={`qty-${line.id}`} className="sr-only">
-                Quantity
-              </label>
-              <input
-                id={`qty-${line.id}`}
-                type="number"
-                min={1}
-                value={line.quantity}
-                onChange={(e) => setQuantity(line.id, e.target.value)}
-                className="w-16 border border-slate-300 px-2 py-2 text-center"
-              />
+            <div className="flex w-full sm:w-auto items-center justify-between sm:justify-end gap-3 sm:gap-4 border-t sm:border-0 pt-3 sm:pt-0 border-slate-100">
+              <div className="flex items-center gap-2">
+                <label htmlFor={`qty-${line.id}`} className="sr-only">
+                  Quantity
+                </label>
+                <input
+                  id={`qty-${line.id}`}
+                  type="number"
+                  min={1}
+                  value={line.quantity}
+                  onChange={(e) => setQuantity(line.id, e.target.value)}
+                  className="w-20 border border-slate-300 px-2 py-2 text-center"
+                />
+              </div>
+              <p className="min-w-[4.5rem] text-right font-semibold text-slate-900">
+                GH₵{(line.price * line.quantity).toFixed(2)}
+              </p>
+              <button
+                type="button"
+                onClick={() => removeLine(line.id)}
+                className="text-sm font-medium text-red-700 underline shrink-0"
+              >
+                Remove
+              </button>
             </div>
-            <p className="w-24 text-right font-semibold text-slate-900">
-              GH₵{(line.price * line.quantity).toFixed(2)}
-            </p>
-            <button
-              type="button"
-              onClick={() => removeLine(line.id)}
-              className="text-sm text-red-700 underline"
-            >
-              Remove
-            </button>
           </li>
         ))}
       </ul>
