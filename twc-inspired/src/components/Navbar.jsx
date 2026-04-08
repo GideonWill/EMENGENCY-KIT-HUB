@@ -182,6 +182,9 @@ export default function Navbar() {
           <NavLink to="/contact" className={navClass}>
             Contact
           </NavLink>
+          <NavLink to="/tracking" className={navClass}>
+            Tracking
+          </NavLink>
         </nav>
 
         <div className="hidden items-center gap-2 md:flex">
@@ -307,6 +310,13 @@ export default function Navbar() {
               onClick={() => setMobileOpen(false)}
             >
               Contact
+            </NavLink>
+            <NavLink
+              to="/tracking"
+              className="px-3 py-3 text-slate-800"
+              onClick={() => setMobileOpen(false)}
+            >
+              Tracking
             </NavLink>
             <Link
               to="/cart"

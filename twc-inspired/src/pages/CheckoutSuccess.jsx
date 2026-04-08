@@ -41,9 +41,17 @@ export default function CheckoutSuccess() {
           : `${paymentText}. You should receive a confirmation email shortly when the server is fully configured.`}
       </p>
       <div className="mt-10 flex flex-wrap justify-center gap-3">
+        {!flowMembership && (
+          <Link
+            to="/tracking"
+            className={`inline-flex px-8 py-3 text-sm ${CTA_PRIMARY}`}
+          >
+            Track your order
+          </Link>
+        )}
         <Link
           to="/shop"
-          className={`inline-flex px-8 py-3 text-sm ${CTA_PRIMARY}`}
+          className={`inline-flex px-8 py-3 text-sm ${flowMembership ? CTA_PRIMARY : CTA_SECONDARY}`}
         >
           Continue shopping
         </Link>

@@ -12,6 +12,7 @@ import Cart from './pages/Cart'
 import CheckoutSuccess from './pages/CheckoutSuccess'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import Tracking from './pages/Tracking'
 import NotFound from './pages/NotFound'
 
 export default function App() {
@@ -30,6 +31,7 @@ export default function App() {
         <Route path="/checkout/success" element={<CheckoutSuccess />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/tracking" element={<Tracking />} />
         <Route path="*" element={<NotFound />} />
       </Route>
     </Routes>
