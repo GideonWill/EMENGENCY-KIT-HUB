@@ -145,9 +145,8 @@ export default function ProductDetails() {
                   id="qty"
                   type="number"
                   min={1}
-                  max={99}
                   value={qty}
-                  onChange={(e) => setQty(Math.max(1, Math.min(99, Number(e.target.value) || 1)))}
+                  onChange={(e) => setQty(Math.max(1, Number(e.target.value) || 1))}
                   className="mt-2 w-full border border-slate-300 bg-white px-4 py-3 text-center text-base font-medium text-slate-900 outline-none focus:border-brand-600 focus:ring-1 focus:ring-brand-600 sm:w-24"
                 />
               </div>

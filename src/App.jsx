@@ -14,10 +14,12 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Tracking from './pages/Tracking'
 import NotFound from './pages/NotFound'
+import AdminDashboard from './pages/AdminDashboard'
 
 export default function App() {
   return (
     <Routes>
+      <Route path="/admin/orders" element={<AdminDashboard />} />
       <Route element={<MainLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/shop" element={<Shop />} />

@@ -200,13 +200,21 @@ export default function Navbar() {
             )}
           </Link>
           {isAuthenticated ? (
-            <button
-              type="button"
-              onClick={() => logout()}
-              className={`px-4 py-2.5 text-sm ${CTA_SECONDARY}`}
-            >
-              Sign out
-            </button>
+            <>
+              <Link
+                to="/admin/orders"
+                className={`px-4 py-2.5 text-sm font-semibold text-brand-700 hover:bg-slate-50`}
+              >
+                Admin Portal
+              </Link>
+              <button
+                type="button"
+                onClick={() => logout()}
+                className={`px-4 py-2.5 text-sm ${CTA_SECONDARY}`}
+              >
+                Sign out
+              </button>
+            </>
           ) : (
             <Link
               to="/login"
@@ -223,23 +231,39 @@ export default function Navbar() {
           </Link>
         </div>
 
-        <button
-          type="button"
-          className="inline-flex border border-transparent p-2 text-slate-700 hover:border-slate-200 md:hidden"
-          aria-expanded={mobileOpen}
-          aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
-          onClick={() => setMobileOpen((o) => !o)}
-        >
-          {mobileOpen ? (
+        <div className="flex items-center gap-1 md:hidden">
+          <Link
+            to="/cart"
+            className="group relative p-2 text-slate-700 hover:text-brand-700"
+            aria-label="Cart"
+          >
             <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
             </svg>
-          ) : (
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-            </svg>
-          )}
-        </button>
+            {cartCount > 0 && (
+              <span className="absolute right-0 top-0 flex h-4 min-w-4 items-center justify-center rounded-full bg-brand-600 px-1 text-[9px] font-bold text-white">
+                {cartCount > 99 ? '99+' : cartCount}
+              </span>
+            )}
+          </Link>
+          <button
+            type="button"
+            className="inline-flex border border-transparent p-2 text-slate-700 hover:border-slate-200"
+            aria-expanded={mobileOpen}
+            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            onClick={() => setMobileOpen((o) => !o)}
+          >
+            {mobileOpen ? (
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              </svg>
+            )}
+          </button>
+        </div>
       </div>
 
       {mobileOpen && (
@@ -326,16 +350,25 @@ export default function Navbar() {
               Cart{cartCount > 0 ? ` (${cartCount})` : ''}
             </Link>
             {isAuthenticated ? (
-              <button
-                type="button"
-                className="px-3 py-3 text-left text-slate-800"
-                onClick={() => {
-                  logout()
-                  setMobileOpen(false)
-                }}
-              >
-                Sign out
-              </button>
+              <>
+                <Link
+                  to="/admin/orders"
+                  className="px-3 py-3 text-left text-brand-700 font-semibold"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Admin Portal
+                </Link>
+                <button
+                  type="button"
+                  className="px-3 py-3 text-left text-slate-800"
+                  onClick={() => {
+                    logout()
+                    setMobileOpen(false)
+                  }}
+                >
+                  Sign out
+                </button>
+              </>
             ) : (
               <Link
                 to="/login"

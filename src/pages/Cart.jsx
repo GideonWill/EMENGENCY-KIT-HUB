@@ -48,6 +48,32 @@ export default function Cart() {
       // Simulate payment processing working correctly for 1.5 seconds
       await new Promise(resolve => setTimeout(resolve, 1500))
       
+      // Generate real-time order for Admin Dashboard 
+      const orderPayload = {
+        id: `ORD-${Math.floor(Math.random() * 90000) + 10000}`,
+        date: new Date().toISOString(),
+        customer: {
+          name: 'Authenticated Client', // Note: use actual auth context user details here in prod
+          facility: 'Direct Checkout',
+          email: 'demo-client@domain.com',
+          phone: '+233 55 000 0000',
+          address: 'Default Registered Address, Accra, Ghana'
+        },
+        items: lines.map(l => ({ name: l.name, qty: Number(l.quantity), price: l.price })),
+        method: method === 'mobile_money' ? 'Mobile Money' : 'Bank Card',
+        status: 'Pending'
+      }
+
+      // Read existing, append new, write back to trigger storage events
+      const existing = localStorage.getItem('admin_orders')
+      const parsedOrders = existing ? JSON.parse(existing) : []
+      parsedOrders.push(orderPayload)
+      localStorage.setItem('admin_orders', JSON.stringify(parsedOrders))
+      
+      // Dispatch immediately for identical window frame re-renders
+      window.dispatchEvent(new Event('order_placed'))
+      window.dispatchEvent(new Event('storage'))
+
       // Complete order
       clear()
       navigate(`/checkout/success?method=${method}`)
@@ -119,7 +145,6 @@ export default function Cart() {
                 id={`qty-${line.id}`}
                 type="number"
                 min={1}
-                max={99}
                 value={line.quantity}
                 onChange={(e) => setQuantity(line.id, e.target.value)}
                 className="w-16 border border-slate-300 px-2 py-2 text-center"
