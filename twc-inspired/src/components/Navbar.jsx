@@ -51,14 +51,14 @@ export default function Navbar() {
       <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
         <Link
           to="/"
-          className="flex max-w-[min(100%,240px)] shrink-0 items-center gap-2 rounded-md border border-slate-200/90 bg-white p-2 shadow-sm"
+          className="flex shrink-0 items-center gap-2 py-2"
         >
           <img
             src={LOGO_SRC}
             alt=""
-            width={220}
-            height={72}
-            className="h-9 w-auto max-h-11 object-contain object-left sm:h-10"
+            width={280}
+            height={90}
+            className="h-12 w-auto max-h-16 object-contain object-left sm:h-14"
           />
           <span className="sr-only">{COMPANY_NAME}</span>
         </Link>

@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import Hero from '../components/Hero'
 import { useAuth } from '../context/AuthContext'
 import { getApiBase, createSubscriptionCheckoutSession } from '../lib/api'
@@ -42,10 +42,20 @@ const tiers = [
 
 export default function Membership() {
   const navigate = useNavigate()
+  const { hash } = useLocation()
   const { isAuthenticated } = useAuth()
   const [msg, setMsg] = useState('')
   const [busy, setBusy] = useState(false)
   const [selectedPlan, setSelectedPlan] = useState(null)
+
+  useEffect(() => {
+    if (hash === '#plans') {
+      const el = document.getElementById('plans')
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: 'smooth' }), 100)
+      }
+    }
+  }, [hash])
 
   async function processMembershipCheckout(method = 'bank_card') {
     setMsg('')

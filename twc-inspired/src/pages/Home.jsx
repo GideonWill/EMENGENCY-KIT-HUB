@@ -11,7 +11,7 @@ const collectionLinks = [
   { to: '/shop?collection=bestsellers', label: 'Best sellers' },
   { to: '/shop', label: 'Shop all' },
   { to: '/shop?collection=supplements', label: 'Supplements' },
-  { to: '/membership', label: 'Memberships' },
+  { to: '/membership#plans', label: 'Memberships' },
 ]
 
 const featured = products.slice(0, 4)
@@ -43,10 +43,16 @@ export default function Home() {
                 Shop products
               </Link>
               <Link
-                to="/membership"
+                to="/membership#plans"
                 className={`inline-flex items-center justify-center px-7 py-3 text-sm ${CTA_SECONDARY}`}
               >
                 Explore membership
+              </Link>
+              <Link
+                to="/consultation"
+                className={`inline-flex items-center justify-center px-7 py-3 text-sm ${CTA_SECONDARY} border-brand-200 hover:border-brand-300 bg-white hover:bg-slate-50`}
+              >
+                Book consultation
               </Link>
             </div>
           </div>
@@ -244,6 +250,12 @@ export default function Home() {
               className="inline-flex border-2 border-white px-8 py-3.5 text-sm font-semibold text-white transition-all duration-300 ease-out hover:bg-white/15"
             >
               Contact us
+            </Link>
+            <Link
+              to="/consultation"
+              className="inline-flex border-2 border-white px-8 py-3.5 text-sm font-semibold text-white transition-all duration-300 ease-out hover:bg-white/15"
+            >
+              Book consultation
             </Link>
           </div>
         </div>
