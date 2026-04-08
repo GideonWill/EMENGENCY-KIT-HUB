@@ -216,12 +216,20 @@ export default function Navbar() {
               </button>
             </>
           ) : (
-            <Link
-              to="/login"
-              className={`px-4 py-2.5 text-sm ${CTA_SECONDARY}`}
-            >
-              Sign in
-            </Link>
+            <>
+              <Link
+                to="/login"
+                className={`px-4 py-2.5 text-sm ${CTA_SECONDARY}`}
+              >
+                Sign in
+              </Link>
+              <Link
+                to="/register"
+                className={`px-4 py-2.5 text-sm ${CTA_SECONDARY}`}
+              >
+                Sign up
+              </Link>
+            </>
           )}
           <Link
             to="/shop"
@@ -370,13 +378,22 @@ export default function Navbar() {
                 </button>
               </>
             ) : (
-              <Link
-                to="/login"
-                className="px-3 py-3 text-slate-800"
-                onClick={() => setMobileOpen(false)}
-              >
-                Sign in
-              </Link>
+              <>
+                <Link
+                  to="/login"
+                  className="px-3 py-3 text-slate-800"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Sign in
+                </Link>
+                <Link
+                  to="/register"
+                  className="px-3 py-3 text-slate-800"
+                  onClick={() => setMobileOpen(false)}
+                >
+                  Sign up
+                </Link>
+              </>
             )}
             <Link
               to="/shop"
