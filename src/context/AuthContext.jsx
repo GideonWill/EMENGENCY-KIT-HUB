@@ -109,7 +109,7 @@ export function AuthProvider({ children }) {
     await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence)
     const userCredential = await createUserWithEmailAndPassword(auth, email, password)
     
-    const displayName = `${firstName} ${lastName}`.trim()
+    const displayName = `${firstName || ''} ${lastName || ''}`.trim()
     if (displayName) {
       await updateProfile(userCredential.user, { displayName })
     }

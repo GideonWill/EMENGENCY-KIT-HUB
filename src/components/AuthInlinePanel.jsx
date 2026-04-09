@@ -26,7 +26,7 @@ export default function AuthInlinePanel({
       if (mode === 'login') {
         await login(email, password)
       } else {
-        await register(email, password)
+        await register({ email, password })
       }
       onAuthSuccess?.()
     } catch (err) {
