@@ -6,6 +6,13 @@ export default function Contact() {
 
   function handleSubmit(e) {
     e.preventDefault()
+    const formData = new FormData(e.target)
+    const topic = formData.get('topic')
+    const message = formData.get('message')
+    const name = formData.get('name')
+    
+    const waText = encodeURIComponent(`Message from ${name}\nTopic: ${topic}\n\n${message}`)
+    window.open(`https://wa.me/233592678531?text=${waText}`, '_blank')
     setSent(true)
   }
 
@@ -23,7 +30,7 @@ export default function Contact() {
             <dl className="mt-10 space-y-6 text-slate-700">
               <div>
                 <dt className="text-sm font-semibold text-slate-500">Phone</dt>
-                <dd className="mt-1">(555) 010-0199</dd>
+                <dd className="mt-1">0592678531</dd>
               </div>
               <div>
                 <dt className="text-sm font-semibold text-slate-500">Email</dt>

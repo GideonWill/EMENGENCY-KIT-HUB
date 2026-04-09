@@ -123,12 +123,15 @@ export function AuthProvider({ children }) {
     return { data: { user: u, token } }
   }, [])
 
-  const logout = useCallback(() => {
+  const logout = useCallback(async () => {
     if (isDemoMode()) {
       localStorage.removeItem(DEMO_SESSION_KEY)
+      sessionStorage.removeItem(DEMO_SESSION_KEY)
       setUser(null)
       return
     }
+    const { signOut } = await import('firebase/auth')
+    await signOut(auth)
     setStoredToken('')
     setUser(null)
   }, [])
@@ -145,6 +148,7 @@ export function AuthProvider({ children }) {
       user,
       loading,
       isAuthenticated: !!user,
+      isAdmin: user?.email === 'gideonogunu@gmail.com' || (isDemoMode() && user?.email === 'admin@example.com'),
       refreshUser,
       login,
       register,

@@ -150,10 +150,34 @@ export default function AdminDashboard() {
           <div className="p-4 sm:p-8">
             <h1 className="text-2xl font-display text-slate-900">Customer Directory</h1>
             <p className="text-sm text-slate-600 mt-1 mb-8">View and manage registered clients and pharmaceutical facilities.</p>
-            <div className="bg-white border border-slate-200 shadow-sm p-8 text-center text-slate-500">
-              Customer CRM is currently disconnected. Future updates will map to Firebase Authentication. 
-              <br/><br/>
-              <em>In this demo, orders automatically capture guest details.</em>
+            <div className="bg-white border border-slate-200 shadow-sm overflow-x-auto">
+              <table className="w-full text-left whitespace-nowrap">
+                <thead className="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  <tr>
+                    <th className="px-6 py-4">Name</th>
+                    <th className="px-6 py-4">Email</th>
+                    <th className="px-6 py-4">Phone</th>
+                    <th className="px-6 py-4">Facility</th>
+                    <th className="px-6 py-4 text-right">Total Orders</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-slate-100 text-sm">
+                  {Array.from(new Map(orders.map(o => [o.customer.email, o.customer])).values()).map((customer, idx) => {
+                     const customerOrders = orders.filter(o => o.customer.email === customer.email);
+                     return (
+                        <tr key={idx} className="hover:bg-slate-50 transition">
+                          <td className="px-6 py-4 font-medium text-slate-900">{customer.name}</td>
+                          <td className="px-6 py-4 text-slate-500">{customer.email}</td>
+                          <td className="px-6 py-4 text-slate-500">{customer.phone}</td>
+                          <td className="px-6 py-4 text-slate-500">{customer.facility || 'Individual'}</td>
+                          <td className="px-6 py-4 text-right font-semibold">
+                             {customerOrders.length}
+                          </td>
+                        </tr>
+                     )
+                  })}
+                </tbody>
+              </table>
             </div>
           </div>
         )}

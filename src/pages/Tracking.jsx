@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { COMPANY_NAME_SHORT, CTA_PRIMARY } from '../config/brand'
+import { useAuth } from '../context/AuthContext'
 
 const MOCK_ORDER_DATA = {
   id: 'ORD-8Y29X-11M',
@@ -15,27 +16,65 @@ const MOCK_ORDER_DATA = {
 const STATUSES = ['Order Placed', 'Processing', 'Shipped', 'Delivered']
 
 export default function Tracking() {
+  const { user, isAuthenticated } = useAuth()
   const [orderId, setOrderId] = useState('')
   const [trackedOrder, setTrackedOrder] = useState(null)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [myOrders, setMyOrders] = useState([])
 
-  const handleTrack = (e) => {
-    e.preventDefault()
-    if (!orderId.trim()) return
+  const getStatusIndex = (status) => {
+    if (status === 'Pending') return 0
+    if (status === 'Processing') return 1
+    if (status === 'Shipped') return 2
+    if (status === 'Delivered') return 3
+    return 0
+  }
+
+  useEffect(() => {
+    if (isAuthenticated && user?.email) {
+      const saved = localStorage.getItem('admin_orders')
+      if (saved) {
+        const allOrders = JSON.parse(saved)
+        setMyOrders(allOrders.filter(o => o.customer?.email === user.email))
+      }
+    }
+  }, [isAuthenticated, user])
+
+  const performSearch = (searchId) => {
+    if (!searchId.trim()) return
     setLoading(true)
     setError('')
     
-    // Simulate API call to fetch order
     setTimeout(() => {
       setLoading(false)
-      if (orderId.trim().toUpperCase() === MOCK_ORDER_DATA.id || orderId.trim() === 'demo') {
+      const savedData = localStorage.getItem('admin_orders')
+      let foundLocal = null
+      if (savedData) {
+        const allOrders = JSON.parse(savedData)
+        foundLocal = allOrders.find(o => o.id === searchId.trim().toUpperCase())
+      }
+
+      if (foundLocal) {
+        setTrackedOrder({
+          id: foundLocal.id,
+          date: new Date(foundLocal.date).toLocaleDateString(),
+          expectedDelivery: 'Expected in 3-5 days',
+          items: foundLocal.items.map(i => ({ name: i.name, quantity: i.qty, price: i.price })),
+          statusIndex: getStatusIndex(foundLocal.status)
+        })
+      } else if (searchId.trim().toUpperCase() === MOCK_ORDER_DATA.id || searchId.trim() === 'demo') {
         setTrackedOrder(MOCK_ORDER_DATA)
       } else {
-        setError('Order not found. Please double-check your Order ID. (Hint: type "demo")')
+        setError('Order not found. Please double-check your Order ID.')
         setTrackedOrder(null)
       }
     }, 800)
+  }
+
+  const handleTrack = (e) => {
+    e.preventDefault()
+    performSearch(orderId)
   }
 
   return (
@@ -137,6 +176,62 @@ export default function Tracking() {
                     </li>
                   ))}
                 </ul>
+              </div>
+            </div>
+          )}
+
+          {isAuthenticated && myOrders.length > 0 && (
+            <div className="mt-16 border-t border-slate-200 pt-10 animate-in fade-in slide-in-from-bottom-4 duration-500">
+              <h2 className="text-2xl font-display font-semibold text-slate-900 mb-6">My Purchase History</h2>
+              <div className="grid gap-6 sm:grid-cols-2">
+                {myOrders.map(order => (
+                  <div key={order.id} className="bg-slate-50 border border-slate-200 rounded-xl p-5 shadow-sm hover:shadow-md transition flex flex-col">
+                    <div className="flex justify-between items-start mb-4">
+                      <div>
+                        <p className="font-bold text-slate-900">{order.id}</p>
+                        <p className="text-xs text-slate-500">{new Date(order.date).toLocaleDateString()}</p>
+                      </div>
+                      <span className={`px-2 py-1 text-[10px] uppercase font-bold rounded shadow-sm ${order.status==='Pending'?'bg-amber-100 text-amber-800':order.status==='Delivered'?'bg-green-100 text-green-800':'bg-brand-100 text-brand-800'}`}>
+                        {order.status}
+                      </span>
+                    </div>
+                    <ul className="text-sm text-slate-700 divide-y divide-slate-200 mb-5 flex-1">
+                      {order.items.map((item, idx) => (
+                         <li key={idx} className="py-2 flex justify-between">
+                            <span className="truncate pr-4" title={item.name}>{item.name}</span>
+                            <span className="text-slate-500 whitespace-nowrap">x{item.qty}</span>
+                         </li>
+                      ))}
+                    </ul>
+                    <div className="flex gap-2 mt-auto pt-4 border-t border-slate-200">
+                      <button 
+                        onClick={() => {
+                          setOrderId(order.id)
+                          performSearch(order.id)
+                          window.scrollTo({ top: 0, behavior: 'smooth' })
+                        }} 
+                        className="flex-1 py-2 text-xs font-semibold bg-white border border-slate-300 rounded hover:bg-slate-100 transition shadow-sm text-slate-700"
+                      >
+                        Track
+                      </button>
+                      {order.status === 'Pending' && (
+                        <button onClick={() => {
+                          if(window.confirm('Are you sure you want to cancel this order?')) {
+                            const saved = JSON.parse(localStorage.getItem('admin_orders') || '[]')
+                            const updated = saved.filter(o => o.id !== order.id)
+                            localStorage.setItem('admin_orders', JSON.stringify(updated))
+                            setMyOrders(updated.filter(o => o.customer?.email === user.email))
+                            if (trackedOrder?.id === order.id) setTrackedOrder(null)
+                            // Dispatch event so Admin Dashboard updates if open in another tab
+                            window.dispatchEvent(new Event('storage'))
+                          }
+                        }} className="flex-1 py-2 text-xs font-semibold bg-red-50 text-red-600 border border-red-200 rounded hover:bg-red-100 transition shadow-sm">
+                          Cancel
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           )}

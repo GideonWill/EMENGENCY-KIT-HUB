@@ -3,7 +3,7 @@ import logoPng from '../assets/logo.png'
 /** Tobin Emergency Kit Hub — central branding */
 export const COMPANY_NAME = 'TOBIN EMERGENCY KIT HUB'
 export const COMPANY_NAME_SHORT = 'Tobin Emergency Kit Hub'
-export const SUPPORT_EMAIL = 'care@tobinemergencykithub.com'
+export const SUPPORT_EMAIL = 'gideonogunu@gmail.com'
 
 /** Resolved URL for Vite (imported from `src/assets/logo.png`) */
 export const LOGO_SRC = logoPng
