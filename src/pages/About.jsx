@@ -57,6 +57,25 @@ export default function About() {
         imageLeft={false}
         mutedBg
       />
+
+      <ContentSection
+        eyebrow="Innovation"
+        title="Digital Integration"
+        body={
+          <>
+            <p>
+              Guided by the TOBINCO Strategic Implementation Approach, we go beyond physical supplies. Our platform integrates a <strong>Digital Manual</strong> and a <strong>Wellness Hub</strong>.
+            </p>
+            <p>
+              These tools ensure that every kit owner has instant access to expert first-aid guidance and clinical consultations, bridging the gap between preparation and action.
+            </p>
+          </>
+        }
+        cta={{ to: '/wellness', label: 'Explore the Hub' }}
+        image="https://images.unsplash.com/photo-1551601651-2a8555f1a136?w=1000&q=80"
+        imageAlt="Mobile medical app usage"
+        imageLeft={true}
+      />
     </>
   )
 }

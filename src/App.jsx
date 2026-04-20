@@ -8,6 +8,8 @@ import Contact from './pages/Contact'
 import Membership from './pages/Membership'
 import Consultation from './pages/Consultation'
 import SpiritualGuidance from './pages/SpiritualGuidance'
+import WellnessHub from './pages/WellnessHub'
+import Manual from './pages/Manual'
 import Cart from './pages/Cart'
 import CheckoutSuccess from './pages/CheckoutSuccess'
 import Login from './pages/Login'
@@ -28,6 +30,8 @@ export default function App() {
         <Route path="/contact" element={<Contact />} />
         <Route path="/membership" element={<Membership />} />
         <Route path="/consultation" element={<Consultation />} />
+        <Route path="/wellness" element={<WellnessHub />} />
+        <Route path="/manual" element={<Manual />} />
         <Route path="/spiritual-guidance" element={<SpiritualGuidance />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout/success" element={<CheckoutSuccess />} />

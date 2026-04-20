@@ -28,6 +28,12 @@ export default function Consultation() {
             >
               Spiritual guidance (CoP)
             </Link>
+            <Link
+              to="/wellness"
+              className={`inline-flex px-6 py-3 text-sm ${CTA_SECONDARY}`}
+            >
+              The Wellness Hub
+            </Link>
           </div>
         </div>
       </div>
@@ -41,7 +47,7 @@ export default function Consultation() {
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {practitioners.map((p) => (
             <article key={p.id} className="flex flex-col border border-slate-200 bg-white shadow-sm">
-              <img src={p.image} alt="" className="aspect-[4/3] w-full object-cover object-top" />
+              <img src={p.image} alt="" className={`aspect-square w-full object-cover ${p.objectPosition || 'object-center'}`} />
               <div className="flex flex-1 flex-col border-t border-slate-200 p-5">
                 <h3 className="font-display text-xl text-slate-900">{p.name}</h3>
                 <p className="text-sm font-semibold text-brand-700">{p.title}</p>

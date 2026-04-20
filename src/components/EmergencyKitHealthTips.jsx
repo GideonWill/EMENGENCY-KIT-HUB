@@ -6,7 +6,7 @@ const tips = [
   {
     title: 'Read the kit guide first',
     body: 'Every Tobin emergency kit includes a printed guide. Review it with your household before you need it so everyone knows where supplies are stored and how items are organized.',
-    image: '/hero-emergency-kit.png',
+    image: '/em1.jpg',
     imageAlt: 'Emergency kit with organized supplies',
   },
   {

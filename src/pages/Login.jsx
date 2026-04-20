@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { isDemoMode } from '../config/demoMode'
 import { CTA_PRIMARY } from '../config/brand'
+import LoadingOverlay from '../components/LoadingOverlay'
 
 export default function Login() {
   const { login, resetPassword } = useAuth()
@@ -50,7 +51,9 @@ export default function Login() {
   }
 
   return (
-    <div className="relative min-h-[calc(100vh-80px)] bg-slate-50 py-14 flex items-center justify-center overflow-hidden">
+    <>
+      {submitting && <LoadingOverlay message="Signing in to your account..." />}
+      <div className="relative min-h-[calc(100vh-80px)] bg-slate-50 py-14 flex items-center justify-center overflow-hidden">
       {/* Decorative background pattern */}
       <div className="absolute inset-0 z-0 bg-[linear-gradient(to_right,#8080800a_1px,transparent_1px),linear-gradient(to_bottom,#8080800a_1px,transparent_1px)] bg-[size:14px_24px]"></div>
       

@@ -3,6 +3,7 @@ import { Link, NavLink } from 'react-router-dom'
 import { useCart } from '../context/CartContext'
 import { useAuth } from '../context/AuthContext'
 import { COMPANY_NAME, CTA_PRIMARY, CTA_SECONDARY, LOGO_SRC } from '../config/brand'
+import LogoutConfirmModal from './LogoutConfirmModal'
 
 const shopCollections = [
   {
@@ -38,6 +39,9 @@ export default function Navbar() {
   const { count: cartCount } = useCart()
   const { isAuthenticated, isAdmin, logout } = useAuth()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [shopOpen, setShopOpen] = useState(false)
+  const [careOpen, setCareOpen] = useState(false)
+  const [logoutModalOpen, setLogoutModalOpen] = useState(false)
 
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : ''
@@ -52,6 +56,7 @@ export default function Navbar() {
         <Link
           to="/"
           className="flex shrink-0 items-center gap-2 py-2"
+          onClick={() => { setShopOpen(false); setCareOpen(false); }}
         >
           <img
             src={LOGO_SRC}
@@ -64,40 +69,46 @@ export default function Navbar() {
         </Link>
 
         <nav className="hidden items-center gap-0 md:flex" aria-label="Main">
-          <NavLink to="/" className={navClass} end>
+          <NavLink to="/" className={navClass} onClick={() => { setShopOpen(false); setCareOpen(false); }} end>
             Home
           </NavLink>
 
-          {/* Mega dropdown — hover + focus-within (reference-style wide panel) */}
-          <div className="group relative">
+          {/* Mega dropdown — State-controlled for better UX */}
+          <div 
+            onMouseEnter={() => setShopOpen(true)}
+            onMouseLeave={() => setShopOpen(false)}
+          >
             <button
               type="button"
-              className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-600 outline-none transition-colors hover:text-brand-700 group-hover:text-brand-700"
-              aria-expanded={false}
+              className={`flex items-center gap-1 px-3 py-2 text-sm font-medium outline-none transition-colors ${shopOpen ? 'text-brand-700' : 'text-slate-600 hover:text-brand-700'}`}
+              aria-expanded={shopOpen}
               aria-haspopup="true"
             >
               Shop
-              <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:rotate-180" />
+              <ChevronDown className={`h-4 w-4 shrink-0 transition-transform duration-200 ${shopOpen ? 'rotate-180' : ''}`} />
             </button>
 
             <div
-              className="invisible absolute left-1/2 top-full z-50 w-[min(calc(100vw-2rem),44rem)] -translate-x-1/2 border-t-2 border-brand-600 bg-white pt-0 opacity-0 shadow-[0_24px_48px_-12px_rgba(15,23,42,0.25)] transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"
+              className={`absolute left-0 right-0 top-full z-50 mx-auto w-[min(calc(100vw-2rem),72rem)] border-t-2 border-brand-600 bg-white shadow-[0_24px_48px_-12px_rgba(15,23,42,0.25)] transition-all duration-150 ${
+                shopOpen ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 translate-y-1'
+              }`}
               role="navigation"
               aria-label="Shop menu"
             >
               {/* Hover bridge */}
               <div className="absolute -top-2 left-0 right-0 h-2 bg-transparent" aria-hidden />
-              <div className="grid grid-cols-1 border border-t-0 border-slate-200 sm:grid-cols-[1fr_13rem]">
-                <div className="p-6 sm:p-8">
+              <div className="grid grid-cols-1 border border-t-0 border-slate-200 sm:grid-cols-[1fr_18rem]">
+                <div className="p-8 sm:p-10">
                   <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">
                     Our collections
                   </p>
-                  <ul className="mt-5 grid gap-1 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-1">
+                  <ul className="mt-6 grid gap-2 sm:grid-cols-2 sm:gap-x-12 sm:gap-y-2">
                     {shopCollections.map(({ to, label, hint }) => (
                       <li key={to}>
                         <Link
                           to={to}
-                          className="block px-2 py-2.5 transition hover:bg-brand-50 sm:-mx-2"
+                          className="block px-3 py-3 transition hover:bg-brand-50 sm:-mx-3"
+                          onClick={() => setShopOpen(false)}
                         >
                           <span className="block text-base font-semibold text-slate-900">{label}</span>
                           <span className="mt-0.5 block text-xs text-slate-500">{hint}</span>
@@ -105,28 +116,30 @@ export default function Navbar() {
                       </li>
                     ))}
                   </ul>
-                  <div className="mt-6 border-t border-slate-100 pt-5">
+                  <div className="mt-8 border-t border-slate-100 pt-6">
                     <Link
                       to="/shop"
                       className="text-sm font-semibold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-800"
+                      onClick={() => setShopOpen(false)}
                     >
                       View all products →
                     </Link>
                   </div>
                 </div>
-                <div className="flex flex-col justify-center border-t border-slate-100 bg-slate-50 p-6 sm:border-l sm:border-t-0">
+                <div className="flex flex-col justify-center border-t border-slate-100 bg-slate-50 p-8 sm:border-l sm:border-t-0">
                   <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
                     Featured
                   </p>
-                  <p className="mt-3 font-display text-lg leading-snug text-slate-900">
+                  <p className="mt-4 font-display text-xl leading-tight text-slate-900">
                     Stock up &amp; save on kits
                   </p>
-                  <p className="mt-2 text-xs leading-relaxed text-slate-600">
+                  <p className="mt-3 text-sm leading-relaxed text-slate-600">
                     Bundle essentials for home and travel. Demo promotion copy.
                   </p>
                   <Link
                     to="/shop?collection=bestsellers"
-                    className={`mt-5 inline-flex w-full items-center justify-center py-2.5 text-center text-xs font-bold uppercase tracking-wide ${CTA_PRIMARY}`}
+                    className={`mt-6 inline-flex w-full items-center justify-center py-3 text-center text-xs font-bold uppercase tracking-wide ${CTA_PRIMARY}`}
+                    onClick={() => setShopOpen(false)}
                   >
                     Shop best sellers
                   </Link>
@@ -136,24 +149,51 @@ export default function Navbar() {
           </div>
 
           {/* Care — consultation & spiritual support */}
-          <div className="group relative">
+          <div 
+            onMouseEnter={() => setCareOpen(true)}
+            onMouseLeave={() => setCareOpen(false)}
+          >
             <button
               type="button"
-              className="flex items-center gap-1 px-3 py-2 text-sm font-medium text-slate-600 outline-none transition-colors hover:text-brand-700 group-hover:text-brand-700"
+              className={`flex items-center gap-1 px-3 py-2 text-sm font-medium outline-none transition-colors ${careOpen ? 'text-brand-700' : 'text-slate-600 hover:text-brand-700'}`}
               aria-haspopup="true"
+              aria-expanded={careOpen}
             >
-              Care
-              <ChevronDown className="h-4 w-4 shrink-0 transition-transform duration-200 group-hover:rotate-180" />
+              Care & Knowledge
+              <ChevronDown className={`h-4 w-4 shrink-0 transition-transform duration-200 ${careOpen ? 'rotate-180' : ''}`} />
             </button>
-            <div className="invisible absolute left-1/2 top-full z-50 w-[min(calc(100vw-2rem),22rem)] -translate-x-1/2 border-t-2 border-brand-600 bg-white pt-0 opacity-0 shadow-xl transition-[opacity,visibility] duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+            <div className={`absolute left-0 right-0 top-full z-50 mx-auto w-[min(calc(100vw-2rem),28rem)] border-t-2 border-brand-600 bg-white shadow-xl transition-all duration-150 ${
+                careOpen ? 'visible opacity-100 translate-y-0' : 'invisible opacity-0 translate-y-1'
+              }`}>
               <div className="absolute -top-2 left-0 right-0 h-2 bg-transparent" aria-hidden />
-              <div className="border border-t-0 border-slate-200 p-5">
-                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">Care &amp; counsel</p>
+              <div className="border border-t-0 border-slate-200 p-6">
+                <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500">Clinical & Natural Support</p>
                 <ul className="mt-3 space-y-1">
+                  <li>
+                    <Link
+                      to="/wellness"
+                      className="block border border-transparent px-2 py-2 transition hover:border-slate-200 hover:bg-slate-50"
+                      onClick={() => setCareOpen(false)}
+                    >
+                      <span className="block text-sm font-semibold text-brand-800">The Wellness Hub</span>
+                      <span className="text-xs text-slate-500">Centralized destination for all care services</span>
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      to="/manual"
+                      className="block border border-transparent px-2 py-2 transition hover:border-slate-200 hover:bg-slate-50"
+                      onClick={() => setCareOpen(false)}
+                    >
+                      <span className="block text-sm font-semibold text-slate-900">Digital Manual</span>
+                      <span className="text-xs text-slate-500">Clinical & natural first-aid guides</span>
+                    </Link>
+                  </li>
                   <li>
                     <Link
                       to="/consultation"
                       className="block border border-transparent px-2 py-2 transition hover:border-slate-200 hover:bg-slate-50"
+                      onClick={() => setCareOpen(false)}
                     >
                       <span className="block text-sm font-semibold text-slate-900">Consultation</span>
                       <span className="text-xs text-slate-500">Licensed health practitioners</span>
@@ -163,6 +203,7 @@ export default function Navbar() {
                     <Link
                       to="/spiritual-guidance"
                       className="block border border-transparent px-2 py-2 transition hover:border-slate-200 hover:bg-slate-50"
+                      onClick={() => setCareOpen(false)}
                     >
                       <span className="block text-sm font-semibold text-slate-900">Spiritual guidance</span>
                       <span className="text-xs text-slate-500">Church of Pentecost pastoral care</span>
@@ -173,16 +214,16 @@ export default function Navbar() {
             </div>
           </div>
 
-          <NavLink to="/about" className={navClass}>
+          <NavLink to="/about" className={navClass} onClick={() => { setShopOpen(false); setCareOpen(false); }}>
             About
           </NavLink>
-          <NavLink to="/membership" className={navClass}>
+          <NavLink to="/membership" className={navClass} onClick={() => { setShopOpen(false); setCareOpen(false); }}>
             Membership
           </NavLink>
-          <NavLink to="/contact" className={navClass}>
+          <NavLink to="/contact" className={navClass} onClick={() => { setShopOpen(false); setCareOpen(false); }}>
             Contact
           </NavLink>
-          <NavLink to="/tracking" className={navClass}>
+          <NavLink to="/tracking" className={navClass} onClick={() => { setShopOpen(false); setCareOpen(false); }}>
             Track & Orders
           </NavLink>
         </nav>
@@ -211,7 +252,7 @@ export default function Navbar() {
               )}
               <button
                 type="button"
-                onClick={() => logout()}
+                onClick={() => setLogoutModalOpen(true)}
                 className={`px-4 py-2.5 text-sm ${CTA_SECONDARY}`}
               >
                 Sign out
@@ -257,7 +298,7 @@ export default function Navbar() {
               )}
               <button
                 type="button"
-                onClick={() => logout()}
+                onClick={() => setLogoutModalOpen(true)}
                 className="p-2 text-slate-700 hover:text-brand-700"
                 aria-label="Sign out"
               >
@@ -326,8 +367,22 @@ export default function Navbar() {
               Home
             </NavLink>
             <p className="px-3 pt-2 text-xs font-semibold uppercase tracking-wider text-slate-400">
-              Care
+              Care & Knowledge
             </p>
+            <Link
+              to="/wellness"
+              className="px-3 py-2 pl-6 text-brand-700 font-semibold"
+              onClick={() => setMobileOpen(false)}
+            >
+              The Wellness Hub
+            </Link>
+            <Link
+              to="/manual"
+              className="px-3 py-2 pl-6 text-slate-700"
+              onClick={() => setMobileOpen(false)}
+            >
+              Digital Manual
+            </Link>
             <Link
               to="/consultation"
               className="px-3 py-2 pl-6 text-slate-700"
@@ -412,8 +467,8 @@ export default function Navbar() {
                   type="button"
                   className="px-3 py-3 text-left text-slate-800"
                   onClick={() => {
-                    logout()
                     setMobileOpen(false)
+                    setLogoutModalOpen(true)
                   }}
                 >
                   Sign out
@@ -447,6 +502,15 @@ export default function Navbar() {
           </nav>
         </div>
       )}
+
+      <LogoutConfirmModal
+        isOpen={logoutModalOpen}
+        onConfirm={() => {
+          logout()
+          setLogoutModalOpen(false)
+        }}
+        onCancel={() => setLogoutModalOpen(false)}
+      />
     </header>
   )
 }

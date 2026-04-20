@@ -1,12 +1,10 @@
-import logoPng from '../assets/logo.png'
-
 /** Tobin Emergency Kit Hub — central branding */
 export const COMPANY_NAME = 'TOBIN EMERGENCY KIT HUB'
 export const COMPANY_NAME_SHORT = 'Tobin Emergency Kit Hub'
 export const SUPPORT_EMAIL = 'gideonogunu@gmail.com'
 
-/** Resolved URL for Vite (imported from `src/assets/logo.png`) */
-export const LOGO_SRC = logoPng
+/** Resolved URL for the logo in the public folder */
+export const LOGO_SRC = '/logo-tobin-emergency-kit-hub.png'
 
 /** Default embed (override via VITE_YOUTUBE_EMBED_ID) — https://youtu.be/KKN7Ewht1DQ */
 export const DEFAULT_YOUTUBE_EMBED_ID = 'KKN7Ewht1DQ'

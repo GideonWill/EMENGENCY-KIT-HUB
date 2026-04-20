@@ -11,11 +11,12 @@ const footerColumns = [
     ],
   },
   {
-    title: 'Care',
+    title: 'Care & Knowledge',
     links: [
+      { to: '/wellness', label: 'The Wellness Hub' },
+      { to: '/manual', label: 'Digital Manual' },
       { to: '/consultation', label: 'Consultation' },
       { to: '/spiritual-guidance', label: 'Spiritual guidance (CoP)' },
-      { to: '/membership', label: 'Membership' },
     ],
   },
   {

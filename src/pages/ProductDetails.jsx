@@ -18,6 +18,7 @@ export default function ProductDetails() {
   const product = getProductById(id)
   const [activeIdx, setActiveIdx] = useState(0)
   const [qty, setQty] = useState(1)
+  const [subscription, setSubscription] = useState('one-time')
   const [addedMsg, setAddedMsg] = useState('')
   const { addItem } = useCart()
 
@@ -58,13 +59,13 @@ export default function ProductDetails() {
         <div className="grid gap-10 lg:grid-cols-2 lg:gap-12 xl:grid-cols-[1.05fr_1fr] xl:gap-16">
           {/* Gallery */}
           <div>
-            <div className="relative overflow-hidden border border-slate-200 bg-slate-100">
+            <div className="relative overflow-hidden border border-slate-200 bg-white p-8">
               {badge && (
                 <span className="absolute left-0 top-0 z-10 bg-brand-600 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
                   {badge}
                 </span>
               )}
-              <img src={activeImage} alt="" className="aspect-square w-full object-cover" />
+              <img src={activeImage} alt="" className="aspect-square w-full object-contain" />
             </div>
             <div className="mt-3 flex flex-wrap gap-2">
               {gallery.map((src, i) => (
@@ -77,7 +78,7 @@ export default function ProductDetails() {
                   }`}
                   aria-label={`View image ${i + 1}`}
                 >
-                  <img src={src} alt="" className="h-full w-full object-cover" />
+                  <img src={src} alt="" className="h-full w-full object-contain p-1" />
                 </button>
               ))}
             </div>
@@ -130,6 +131,57 @@ export default function ProductDetails() {
               </div>
             </div>
 
+            {/* Subscription Logic */}
+            <div className="mt-8 space-y-3">
+              <label className="block text-xs font-bold uppercase tracking-widest text-slate-500">Purchase options</label>
+              <div 
+                className={`flex items-center justify-between p-4 border cursor-pointer transition-all ${
+                  subscription === 'one-time' ? 'border-brand-600 bg-brand-50/30' : 'border-slate-200 hover:border-slate-300'
+                }`}
+                onClick={() => setSubscription('one-time')}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${subscription === 'one-time' ? 'border-brand-600' : 'border-slate-300'}`}>
+                    {subscription === 'one-time' && <div className="w-2 h-2 rounded-full bg-brand-600" />}
+                  </div>
+                  <span className="text-sm font-medium text-slate-900">One-time purchase</span>
+                </div>
+                <span className="text-sm font-bold text-slate-900">GH₵{price.toFixed(2)}</span>
+              </div>
+
+              <div 
+                className={`flex items-center justify-between p-4 border cursor-pointer transition-all ${
+                  subscription === 'refill' ? 'border-brand-600 bg-brand-50/30' : 'border-slate-200 hover:border-slate-300'
+                }`}
+                onClick={() => setSubscription('refill')}
+              >
+                <div className="flex items-center gap-3">
+                  <div className={`w-4 h-4 rounded-full border flex items-center justify-center ${subscription === 'refill' ? 'border-brand-600' : 'border-slate-300'}`}>
+                    {subscription === 'refill' && <div className="w-2 h-2 rounded-full bg-brand-600" />}
+                  </div>
+                  <div>
+                    <span className="text-sm font-medium text-slate-900">Subscribe & Save (Refill Plan)</span>
+                    <span className="block text-[10px] text-brand-700 font-bold uppercase">Automated Restocking</span>
+                  </div>
+                </div>
+                <div className="text-right">
+                  <span className="text-sm font-bold text-brand-800">GH₵{(price * 0.9).toFixed(2)}</span>
+                  <span className="block text-[10px] text-slate-400 line-through">GH₵{price.toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 p-4 bg-slate-50 border border-slate-200 rounded-sm">
+              <div className="flex items-start gap-3">
+                <span className="text-xl">📖</span>
+                <div>
+                  <p className="text-sm font-semibold text-slate-900">Digital Manual Included</p>
+                  <p className="text-xs text-slate-500 mt-0.5">Instant access to first-aid guides after purchase.</p>
+                  <Link to="/manual" className="mt-2 inline-block text-xs font-bold text-brand-700 hover:underline">Preview manual →</Link>
+                </div>
+              </div>
+            </div>
+
             {addedMsg && (
               <p className="mt-4 border border-brand-200 bg-brand-50 px-4 py-2 text-sm text-brand-900" role="status">
                 {addedMsg}
@@ -153,16 +205,19 @@ export default function ProductDetails() {
               <button
                 type="button"
                 onClick={() => {
+                  const finalPrice = subscription === 'refill' ? product.price * 0.9 : product.price
+                  const displayName = subscription === 'refill' ? `${product.name} (Refill Subscription)` : product.name
+                  
                   addItem(
                     {
                       id: product.id,
-                      name: product.name,
-                      price: product.price,
+                      name: displayName,
+                      price: finalPrice,
                       image: product.image,
                     },
                     qty
                   )
-                  setAddedMsg(`Added ${qty} × ${product.name} to your cart.`)
+                  setAddedMsg(`Added ${qty} × ${displayName} to your cart.`)
                   setQty(1)
                 }}
                 className={`flex-1 py-4 text-sm font-bold uppercase tracking-wide ${CTA_PRIMARY}`}

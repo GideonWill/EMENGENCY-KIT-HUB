@@ -9,11 +9,11 @@ export default function TrendingSpotlightTile({ product }) {
       to={`/product/${id}`}
       className="group flex w-44 shrink-0 snap-start flex-col overflow-hidden border border-slate-200 bg-white shadow-sm transition-all duration-300 ease-out hover:-translate-y-0.5 hover:shadow-md"
     >
-      <div className="h-44 w-44 shrink-0 overflow-hidden bg-slate-100">
+      <div className="h-44 w-44 shrink-0 overflow-hidden bg-white p-3">
         <img
           src={image}
           alt=""
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
         />
       </div>
       <div className="flex min-h-0 flex-1 flex-col border-t border-slate-200 p-3">

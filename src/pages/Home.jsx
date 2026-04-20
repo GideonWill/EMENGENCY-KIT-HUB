@@ -10,7 +10,8 @@ import { COMPANY_NAME, CTA_PRIMARY, CTA_SECONDARY } from '../config/brand'
 const collectionLinks = [
   { to: '/shop?collection=bestsellers', label: 'Best sellers' },
   { to: '/shop', label: 'Shop all' },
-  { to: '/shop?collection=supplements', label: 'Supplements' },
+  { to: '/wellness', label: 'Wellness Hub' },
+  { to: '/manual', label: 'Digital Manual' },
   { to: '/membership#plans', label: 'Memberships' },
 ]
 
@@ -58,9 +59,9 @@ export default function Home() {
           </div>
           <div className="relative mt-6 min-h-[260px] w-full flex-1 lg:mt-0 lg:min-h-0">
             <img
-              src="/hero-emergency-kit.png"
-              alt="Emergency medical kit with supplies arranged on a wooden surface"
-              className="h-full min-h-[260px] w-full object-cover object-center lg:absolute lg:inset-0 lg:min-h-full"
+              src="/hero section home.png"
+              alt="TOBINCO Medical Emergency Kit surrounded by first-aid supplies"
+              className="h-full min-h-[260px] w-full object-contain object-center lg:absolute lg:inset-0 lg:min-h-full"
             />
           </div>
         </div>
@@ -222,7 +223,7 @@ export default function Home() {
                 key={member.name}
                 className="overflow-hidden border border-slate-200 bg-white shadow-sm"
               >
-                <img src={member.image} alt="" className="aspect-[4/3] w-full object-cover object-top" />
+                <img src={member.image} alt="" className="aspect-square w-full object-cover object-center" />
                 <div className="border-t border-slate-200 p-5">
                   <h3 className="font-display text-xl text-slate-900">{member.name}</h3>
                   <p className="text-sm font-semibold text-brand-700">{member.role}</p>

@@ -6,7 +6,7 @@ export default function ProductCard({ product }) {
 
   return (
     <article className="group flex flex-col overflow-hidden border border-slate-200 bg-white shadow-sm transition hover:shadow-md">
-      <Link to={`/product/${id}`} className="relative block aspect-square overflow-hidden bg-slate-100">
+      <Link to={`/product/${id}`} className="relative block aspect-square overflow-hidden bg-white p-6">
         {badge && (
           <span className="absolute left-0 top-0 z-10 bg-brand-600 px-2 py-1 text-[10px] font-bold uppercase tracking-wider text-white">
             {badge}
@@ -15,7 +15,7 @@ export default function ProductCard({ product }) {
         <img
           src={image}
           alt=""
-          className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+          className="h-full w-full object-contain transition duration-500 group-hover:scale-105"
         />
       </Link>
       <div className="flex flex-1 flex-col border-t border-slate-200 p-5">
