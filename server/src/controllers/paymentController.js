@@ -35,7 +35,7 @@ export const createCheckoutSession = asyncHandler(async (req, res) => {
     
     totalCents = price
     orderItems.push({
-      productId: 0, // Placeholder for membership
+      productId: null, // Placeholder for membership
       name: name,
       unitPriceCents: price,
       quantity: 1,
