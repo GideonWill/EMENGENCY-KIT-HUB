@@ -120,7 +120,7 @@ export default function AdminDashboard() {
     setInventory(inventory.map(p => p.id === id ? { ...p, status } : p))
     try {
       const res = await apiFetch(`/api/products/${id}`, {
-        method: 'PUT',
+        method: 'PATCH',
         body: JSON.stringify({ status })
       })
       if (!res.success) {
@@ -199,6 +199,7 @@ export default function AdminDashboard() {
           setInventory(invRes.data)
         }
         setNewProduct({ name: '', price: '', category: '', status: 'In Stock', image: null, imageFile: null })
+        alert('Product created successfully!')
       } else {
         alert(res.message || 'Failed to create product.')
       }
@@ -225,8 +226,7 @@ export default function AdminDashboard() {
 
   const stockStatusColors = {
     'In Stock': 'bg-green-100 text-green-800',
-    'Out of Stock': 'bg-red-100 text-red-800',
-    'Restocking Soon': 'bg-amber-100 text-amber-800'
+    'Out of Stock': 'bg-red-100 text-red-800'
   }
 
   return (
@@ -290,6 +290,54 @@ export default function AdminDashboard() {
 
       {/* Main Content */}
       <div className="flex-1 overflow-x-hidden">
+        {activeTab === 'analytics' && (
+          <div className="p-4 sm:p-8">
+            <h1 className="text-2xl font-display text-slate-900">Real-time Analytics</h1>
+            <p className="text-sm text-slate-600 mt-1 mb-8">Live overview of your platform's operational metrics.</p>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+              <div className="bg-white border border-slate-200 shadow-sm p-6">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Revenue</p>
+                <p className="mt-2 text-3xl font-semibold text-slate-900">
+                  GH₵ {formatCurrency(orders.filter(o => o.status === 'paid' || o.status === 'completed' || o.status === 'shipped' || o.status === 'delivered').reduce((sum, o) => sum + o.totalCents, 0))}
+                </p>
+              </div>
+              <div className="bg-white border border-slate-200 shadow-sm p-6">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Total Orders</p>
+                <p className="mt-2 text-3xl font-semibold text-slate-900">{orders.length}</p>
+              </div>
+              <div className="bg-white border border-slate-200 shadow-sm p-6">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Pending Orders</p>
+                <p className="mt-2 text-3xl font-semibold text-slate-900">{orders.filter(o => o.status === 'pending').length}</p>
+              </div>
+              <div className="bg-white border border-slate-200 shadow-sm p-6">
+                <p className="text-xs font-bold text-slate-500 uppercase tracking-wider">Active Customers</p>
+                <p className="mt-2 text-3xl font-semibold text-slate-900">{new Set(orders.map(o => o.user.email)).size}</p>
+              </div>
+            </div>
+
+            <h2 className="text-lg font-display text-slate-900 mb-4">Recent Activity Log</h2>
+            <div className="bg-white border border-slate-200 shadow-sm overflow-hidden">
+              <ul className="divide-y divide-slate-100">
+                {orders.slice(0, 5).map(o => (
+                  <li key={o.id} className="p-4 flex justify-between items-center hover:bg-slate-50">
+                    <div>
+                      <p className="text-sm font-semibold text-slate-900">Order #{o.id} placed by {o.user.email}</p>
+                      <p className="text-xs text-slate-500">{new Date(o.createdAt).toLocaleString()}</p>
+                    </div>
+                    <span className={`inline-flex px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider ${statusColors[o.status]}`}>
+                      {o.status}
+                    </span>
+                  </li>
+                ))}
+                {orders.length === 0 && (
+                  <li className="p-8 text-center text-slate-500 text-sm">No recent activity detected.</li>
+                )}
+              </ul>
+            </div>
+          </div>
+        )}
+
         {activeTab === 'payments' && (
           <div className="p-4 sm:p-8">
             <h1 className="text-2xl font-display text-slate-900">Payment Transactions</h1>
@@ -402,7 +450,6 @@ export default function AdminDashboard() {
                           >
                             <option value="In Stock">In Stock</option>
                             <option value="Out of Stock">Out of Stock</option>
-                            <option value="Restocking Soon">Restocking Soon</option>
                           </select>
                         </td>
                         <td className="px-6 py-4 text-right font-semibold text-slate-900">
